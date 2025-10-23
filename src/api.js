@@ -10,9 +10,21 @@ const api = axios.create({
         "Authorization": token ? `Bearer ${token}` : ""
     }   
 })
-console.log('token tolol: ', token)
+console.log('token shfghjsdf: ', token)
 
-
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            console.log('token ada ', token)
+            config.headers.Authorization = `Bearer ${token}`;
+        } else
+        {
+            console.log('token gada', token)
+            delete config.headers.Authorization;
+        } return config
+    }, (error) => Promise.reject(error)
+);
 
 
 export default api;

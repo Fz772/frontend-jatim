@@ -7,6 +7,7 @@ import api from "../api";
 function Dashboard() {
     
     const navigate = useNavigate();
+    const [validation, setValidation] = useState({});
     
     const username = localStorage.getItem('username');
 
@@ -15,6 +16,15 @@ function Dashboard() {
         if(!token) {
             navigate('/')
         }
+        api.get('validations')
+        .then(res => {
+            console.log('validation data: ', res.data.validation);
+            setValidation(res.data.validation)
+            
+        })
+        .catch(error => {
+
+        })
     },[navigate])
 
     
@@ -41,8 +51,8 @@ function Dashboard() {
             </div>
             <div className="row">
 
-                
-                <div className="col-md-4">
+                {!validation && (
+                    <div className="col-md-4">
                     <div className="card card-default">
                         <div className="card-header">
                             <h5 className="mb-0">Data Validation</h5>
@@ -52,27 +62,30 @@ function Dashboard() {
                         </div>
                     </div>
                 </div>
+                )}
+                
                 
 
-                
-                <div className="col-md-4">
+                {validation && validation?.status && (
+                    <div className="col-md-4">
                     <div className="card card-default">
                         <div className="card-header border-0">
                             <h5 className="mb-0">Data Validation</h5>
                         </div>
                         <div className="card-body p-0">
                             <table className="table table-striped mb-0">
+                                <tbody>
                                 <tr>
                                     <th>Status</th>
-                                    <td><span className="badge badge-info">Pending</span></td>
+                                    <td><span className={`badge ${validation?.status === 'accepted' ? "badge-success" : "badge-info"}`}>{validation.status}</span></td>
                                 </tr>
                                 <tr>
                                     <th>Job Category</th>
-                                    <td className="text-muted">-</td>
+                                    <td className="text-muted">sfhsdfhguvbshgfdb</td>
                                 </tr>
                                 <tr>
                                     <th>Job Position</th>
-                                    <td className="text-muted">Web Developer</td>
+                                    <td className="text-muted">{validation.job_position}</td>
                                 </tr>
                                 <tr>
                                     <th>Reason Accepted</th>
@@ -86,10 +99,13 @@ function Dashboard() {
                                     <th>Validator Notes</th>
                                     <td className="text-muted">-</td>
                                 </tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+                )}
+                
                 
 
                 
@@ -100,6 +116,7 @@ function Dashboard() {
                         </div>
                         <div className="card-body p-0">
                             <table className="table table-striped mb-0">
+                                <tbody>
                                 <tr>
                                     <th>Status</th>
                                     <td><span className="badge badge-success">Accepted</span></td>
@@ -124,6 +141,7 @@ function Dashboard() {
                                     <th>Validator Notes</th>
                                     <td className="text-muted">siap kerja</td>
                                 </tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -165,6 +183,7 @@ function Dashboard() {
                             </div>
                             <div className="card-body p-0">
                                 <table className="table table-striped mb-0">
+                                    <tbody>
                                     <tr>
                                         <th>Address</th>
                                         <td className="text-muted">Jln. HOS. Cjokroaminoto (Pasirkaliki) No. 900, DKI Jakarta</td>
@@ -186,6 +205,7 @@ function Dashboard() {
                                         <th>Notes</th>
                                         <td className="text-muted">I was the better one</td>
                                     </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -200,6 +220,7 @@ function Dashboard() {
                             </div>
                             <div className="card-body p-0">
                                 <table className="table table-striped mb-0">
+                                    <tbody>
                                     <tr>
                                         <th>Address</th>
                                         <td className="text-muted">Jln. HOS. Cjokroaminoto (Pasirkaliki) No. 900, DKI Jakarta</td>
@@ -221,6 +242,7 @@ function Dashboard() {
                                         <th>Notes</th>
                                         <td className="text-muted">-</td>
                                     </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
