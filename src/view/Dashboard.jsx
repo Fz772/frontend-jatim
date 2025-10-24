@@ -7,26 +7,42 @@ import api from "../api";
 function Dashboard() {
     
     const navigate = useNavigate();
-    const [validation, setValidation] = useState({});
+    const [validation, setValidation] = useState(null);
+    const [jobVacancy, setJobVacancy] = useState(null);
     
     const username = localStorage.getItem('username');
 
     useEffect(() => {
-       const token = localStorage.getItem('token');
-        if(!token) {
-            navigate('/')
+        const fetchData = async () => {
+            const token = localStorage.getItem('token');
+            if(!token) {
+                navigate('/')
+                return
+            }
+            try {
+                const resVal = await api.get('/validations')
+                const validationData = resVal.data.validation
+                console.log(resVal)
+                const jobId = validationData?.job_category_id
+
+                let JobVacancyData = null;
+                if(jobId) {
+                    const resJob = await api.get(`job_vacancies/${jobId}`)
+                    JobVacancyData = resJob.data ?? null;
+                }
+                setJobVacancy(JobVacancyData);
+                // setJobVacancy(JobVacancyData?.vacancy?.category?.job_category);
+                setValidation(validationData);
+                console.log('validationdata: ', validationData)
+                console.log('JobvacancyData: ', JobVacancyData)
+                
+            } catch (err) {
+                console.error("Fetch error:", err);
+            }
         }
-        api.get('validations')
-        .then(res => {
-            console.log('validation data: ', res.data.validation);
-            setValidation(res.data.validation)
-            
-        })
-        .catch(error => {
-
-        })
-    },[navigate])
-
+        fetchData();
+       },[navigate])
+        console.log('JobvacancyDatasdsada: ', jobVacancy)
     
     return (
         <>
@@ -66,7 +82,7 @@ function Dashboard() {
                 
                 
 
-                {validation && validation?.status && (
+                {validation && ( 
                     <div className="col-md-4">
                     <div className="card card-default">
                         <div className="card-header border-0">
@@ -77,27 +93,27 @@ function Dashboard() {
                                 <tbody>
                                 <tr>
                                     <th>Status</th>
-                                    <td><span className={`badge ${validation?.status === 'accepted' ? "badge-success" : "badge-info"}`}>{validation.status}</span></td>
+                                    <td><span className={`badge ${validation?.status === 'accepted' ? "badge-success" : "badge-info"}`}>{validation?.status}</span></td>
                                 </tr>
                                 <tr>
                                     <th>Job Category</th>
-                                    <td className="text-muted">sfhsdfhguvbshgfdb</td>
+                                    <td className="text-muted">{jobVacancy?.vacancy?.category?.job_category}</td>
                                 </tr>
                                 <tr>
                                     <th>Job Position</th>
-                                    <td className="text-muted">{validation.job_position}</td>
+                                    <td className="text-muted">{validation?.job_position}</td>
                                 </tr>
                                 <tr>
                                     <th>Reason Accepted</th>
-                                    <td className="text-muted">-</td>
+                                    <td className="text-muted">{validation?.reason_accepted}</td>
                                 </tr>
                                 <tr>
                                     <th>Validator</th>
-                                    <td className="text-muted">-</td>
+                                    <td className="text-muted">{validation?.validator.name}</td>
                                 </tr>
                                 <tr>
                                     <th>Validator Notes</th>
-                                    <td className="text-muted">-</td>
+                                    <td className="text-muted">{validation?.validator_notes}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -105,11 +121,13 @@ function Dashboard() {
                     </div>
                 </div>
                 )}
+                    
+                
                 
                 
 
                 
-                <div className="col-md-4">
+                {/* <div className="col-md-4">
                     <div className="card card-default">
                         <div className="card-header border-0">
                             <h5 className="mb-0">Data Validation</h5>
@@ -145,7 +163,7 @@ function Dashboard() {
                             </table>
                         </div>
                     </div>
-                </div>
+                </div> */}
                 
 
             </div>
@@ -167,26 +185,28 @@ function Dashboard() {
             <div className="section-body">
                 <div className="row mb-4">
 
-                    
-                    <div className="col-md-12">
+                    {!validation && validation?.status !== 'accepted' && (
+                        <div className="col-md-12">
                         <div className="alert alert-warning">
                             Your validation must be approved by validator to applying job.
                         </div>
                     </div>
+                    )}
+                    
                     
 
                     
                     <div className="col-md-6">
                         <div className="card card-default">
                             <div className="card-header border-0">
-                                <h5 className="mb-0">PT. Maju Mundur Sejahtera</h5>
+                                <h5 className="mb-0">{jobVacancy?.vacancy?.company}</h5>
                             </div>
                             <div className="card-body p-0">
                                 <table className="table table-striped mb-0">
                                     <tbody>
                                     <tr>
                                         <th>Address</th>
-                                        <td className="text-muted">Jln. HOS. Cjokroaminoto (Pasirkaliki) No. 900, DKI Jakarta</td>
+                                        <td className="text-muted">{jobVacancy?.vacancy?.address}</td>
                                     </tr>
                                     <tr>
                                         <th>Position</th>
