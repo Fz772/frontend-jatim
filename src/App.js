@@ -5,6 +5,7 @@ import Dashboard from './view/Dashboard';
 import './assets/css/bootstrap.css';
 import './assets/css/custom.css';
 import Login from './view/Login';
+import RequestValidation from './view/RequestValidation';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/' element={<Login />} />
+        <Route path='/validation/request' element={<RequestValidation />} />
       </Routes>
     </Router>
   );
