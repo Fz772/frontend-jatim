@@ -217,7 +217,7 @@ function Dashboard() {
                         <h4 className="section-title text-muted">My Job Applications</h4>
                     </div>
                     <div className="col-md-4">
-                        <a href="" className="btn btn-primary btn-lg btn-block">+ Add Job Applications</a>
+                        <a href="/job-vacancies" className="btn btn-primary btn-lg btn-block">+ Add Job Applications</a>
                     </div>
                 </div>
             </div>
@@ -301,7 +301,7 @@ function Dashboard() {
                     
 
                     
-                    <div className="col-md-6">
+                    {/* <div className="col-md-6">
                         <div className="card card-default">
                             <div className="card-header border-0">
                                 <h5 className="mb-0">PT. Maju Mundur Sejahtera</h5>
@@ -334,7 +334,7 @@ function Dashboard() {
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     
 
                 </div>
