@@ -216,9 +216,12 @@ function Dashboard() {
                     <div className="col-md-8">
                         <h4 className="section-title text-muted">My Job Applications</h4>
                     </div>
-                    <div className="col-md-4">
+                    {!jobApplication && (
+                        <div className="col-md-4">
                         <a href="/job-vacancies" className="btn btn-primary btn-lg btn-block">+ Add Job Applications</a>
                     </div>
+                    )}
+                    
                 </div>
             </div>
             <div className="section-body">
